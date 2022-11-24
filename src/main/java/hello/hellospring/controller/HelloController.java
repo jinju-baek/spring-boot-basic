@@ -13,7 +13,6 @@ public class HelloController {
 
     private final MemberService memberService;
 
-    @Autowired
     public HelloController(MemberService memberService) {
         this.memberService = memberService;
     }
