@@ -1,11 +1,13 @@
 package hello.hellospring;
 
-import hello.hellospring.domain.Member;
+import hello.hellospring.repository.JdbcMemberRepository;
 import hello.hellospring.repository.MemberRepository;
-import hello.hellospring.repository.MemoryMemberRepository;
 import hello.hellospring.service.MemberService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.sql.DataSource;
 
 @Configuration
 public class SpringConfig {
@@ -30,6 +32,12 @@ public class SpringConfig {
     *   하지만 B 인터페이스를 주입받는다면 소스 수정없이 D 객체만 주입해주면 된다.
    * */
 
+    private DataSource dataSource;
+
+    public SpringConfig(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
     @Bean
     public MemberService memberService() {
         return new MemberService(memberRepository());
@@ -37,6 +45,7 @@ public class SpringConfig {
 
     @Bean
     public MemberRepository memberRepository() {
-        return new MemoryMemberRepository();
+        // return new MemoryMemberRepository();
+        return new JdbcMemberRepository(dataSource);
     }
 }
